@@ -30,17 +30,7 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: |
-            any::gmailr
-            any::magrittr
-            any::dplyr
-            any::lubridate
-            any::purrr
-            any::stringr
-            any::ggplot2
-            any::scales
+      - uses: r-lib/actions/setup-renv@v2
 
       - name: Build site
         run: rmarkdown::render_site()
