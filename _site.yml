@@ -1,4 +1,5 @@
 name: "dunkeld_oil_club"
+output_dir: docs
 navbar:
   title: "Dunkeld Heating Oil Prices plot"
   left:
