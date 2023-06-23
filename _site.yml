@@ -1,0 +1,6 @@
+name: "dunkeld_oil_club"
+navbar:
+  title: "Dunkeld Heating Oil Prices plot"
+  left:
+    - text: "Price plot"
+      href: index.html
