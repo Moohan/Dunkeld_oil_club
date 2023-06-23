@@ -7,66 +7,57 @@ This plot was last updated at `r Sys.Date()`.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-```{r packages, include=FALSE}
-library(gmailr)
-library(magrittr)
-library(dplyr)
-library(lubridate)
-library(purrr)
-library(stringr)
-library(ggplot2)
-library(scales)
-```
 ```{r auth, include=FALSE}
-gm_auth_configure(path = "gmail_api_creds.json")
+gmailr::gm_auth_configure(path = "gmail_api_creds.json")
 
-gm_auth(email = "dunkeld.oil.club.r@gmail.com", cache = ".secret")
+gmailr::gm_auth(email = "dunkeld.oil.club.r@gmail.com", cache = ".secret")
 ```
 ```{r get_data, include=FALSE}
-thread_ids <- gm_threads(search = "The Oil-Club") %>% 
-  gm_id() 
+thread_ids <- gmailr::gm_threads(search = "The Oil-Club") %>%
+  gmailr::gm_id()
 
-messages <- tibble(
+messages <- dplyr::tibble(
   id = thread_ids,
-  body = map_chr(
-  thread_ids,
-  ~gm_thread(.x) %>% 
-    extract("messages") %>% 
-    extract2(1) %>% 
-    extract2(1) %>% 
-    gm_body() %>% 
-    extract2(1) 
-)
-) %>% 
-  mutate(
-    body_clean = str_squish(body),
-    date = str_extract(
+  body = purrr::map_chr(
+    thread_ids,
+    ~ gmailr::gm_thread(.x) %>%
+      magrittr::extract("messages") %>%
+      magrittr::extract2(1) %>%
+      magrittr::extract2(1) %>%
+      gmailr::gm_body() %>%
+      magrittr::extract2(1)
+  )
+) %>%
+  dplyr::mutate(
+    body_clean = stringr::str_squish(body),
+    date = stringr::str_extract(
       body_clean,
       pattern = "Date: ([A-Z][a-z][a-z]\\, [0-9]?[0-9] [A-Z][a-z][a-z] [0-9]{4} at [0-2][0-9]\\:[0-6][0-9])\\b",
       group = 1
-    ) %>% 
-      dmy_hm(),
-    price = str_extract(
+    ) %>%
+      lubridate::dmy_hm(),
+    price = stringr::str_extract(
       body_clean,
       pattern = "£([0-1]\\.[0-9]{4}) ppl",
       group = 1
-    ) %>% 
+    ) %>%
       as.numeric()
   )
 ```
 
 
 ```{r plot, echo=FALSE}
-messages %>% 
-  ggplot(aes(x = date, y = price)) +
-  geom_line() +
-  scale_x_datetime(
+messages %>%
+  ggplot2::ggplot(ggplot2::aes(x = date, y = price)) +
+  ggplot2::geom_line() +
+  ggplot2::scale_x_datetime(
     name = "Date",
-    labels = label_date_short(),
-    breaks = breaks_width("week")) +
-  scale_y_continuous(
+    labels = scales::label_date_short(),
+    breaks = scales::breaks_width("week")
+  ) +
+  ggplot2::scale_y_continuous(
     name = "Oil Price",
-    labels = label_dollar(prefix = "£")
-    ) +
-  theme_minimal()
+    labels = scales::label_dollar(prefix = "£")
+  ) +
+  ggplot2::theme_minimal()
 ```
