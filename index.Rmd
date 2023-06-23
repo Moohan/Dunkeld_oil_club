@@ -6,6 +6,7 @@ This plot was last updated at `r Sys.Date()`.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(magrittr) # for pipes
 ```
 ```{r auth, include=FALSE}
 gmailr::gm_auth_configure(path = "gmail_api_creds.json")
