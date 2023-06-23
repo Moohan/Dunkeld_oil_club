@@ -2,7 +2,7 @@
 title: "Dunkeld Heating Oil Prices plot"
 ---
 
-This plot was last updated at `r Sys.Date()`.
+This plot was last updated at `r strftime(Sys.time(), format = "%B %d, %Y %H:%M:%S")`.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -51,6 +51,7 @@ messages <- dplyr::tibble(
 messages %>%
   ggplot2::ggplot(ggplot2::aes(x = date, y = price)) +
   ggplot2::geom_line() +
+  ggplot2::geom_point() +
   ggplot2::scale_x_datetime(
     name = "Date",
     labels = scales::label_date_short(),
