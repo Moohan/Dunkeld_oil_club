@@ -23,7 +23,7 @@ messages <- dplyr::tibble(
     thread_ids,
     ~ gmailr::gm_thread(.x) %>%
       magrittr::extract("messages") %>%
-      magrittr::extract2(1) %>%
+      magrittr::extract2(1) %>% 
       magrittr::extract2(1) %>%
       gmailr::gm_body() %>%
       magrittr::extract2(1)
@@ -48,7 +48,7 @@ messages <- dplyr::tibble(
 
 
 ```{r plot, echo=FALSE}
-messages %>%
+plot <- messages %>%
   ggplot2::ggplot(ggplot2::aes(x = date, y = price)) +
   ggplot2::geom_line() +
   ggplot2::geom_point() +
@@ -61,5 +61,9 @@ messages %>%
     name = "Oil Price",
     labels = scales::label_dollar(prefix = "£")
   ) +
-  ggplot2::theme_minimal()
+  ggplot2::theme_minimal() 
+
+plotly::ggplotly(plot) |> 
+  plotly::config(displayModeBar = FALSE)
+
 ```
