@@ -10,44 +10,60 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r auth, include=FALSE}
 gmailr::gm_auth_configure(path = "gmail_api_creds.json")
 
-gmailr::gm_auth(email = "dunkeld.oil.club.r@gmail.com", cache = ".secret")
+gmailr::gm_auth(
+  email = "dunkeld.oil.club.r@gmail.com",
+  cache = ".secret"
+)
 ```
-```{r get_data, include=FALSE}
-thread_ids <- gmailr::gm_threads(search = "The Oil-Club") |>
+```{r get_messages, include=FALSE}
+message_ids <- gmailr::gm_messages(search = "The Oil-Club") |>
   gmailr::gm_id()
 
-messages <- dplyr::tibble(
-  id = thread_ids,
-  body = purrr::map_chr(
-    thread_ids,
-    ~ gmailr::gm_thread(.x) |>
-      magrittr::extract("messages") |>
-      magrittr::extract2(1) |>
-      magrittr::extract2(1) |>
-      gmailr::gm_body() |>
-      magrittr::extract2(1)
-  )
-) |>
-  dplyr::mutate(
-    body_clean = stringr::str_squish(body),
-    date = stringr::str_extract(
-      body_clean,
-      pattern = "Date: ([A-Z][a-z][a-z]\\, [0-9]?[0-9] [A-Z][a-z][a-z] [0-9]{4} at [0-2][0-9]\\:[0-6][0-9])\\b",
-      group = 1
-    ) |>
-      lubridate::dmy_hm(),
-    price = stringr::str_extract(
-      body_clean,
+existing_data <- arrow::read_parquet("data/data.parquet")
+
+new_ids <- setdiff(message_ids, existing_data$id)
+```
+
+```{r parse_new_data, include=FALSE}
+if (length(new_ids) != 0) {
+  messages <- purrr::map(new_ids, gmailr::gm_message)
+
+  dates <- purrr::map_chr(messages, gmailr::gm_date) |>
+    lubridate::dmy_hms()
+
+  prices <- purrr::map_dbl(messages, ~ .x[["snippet"]] |>
+    stringr::str_extract(
       pattern = "£([0-1]\\.[0-9]{4}) ppl",
       group = 1
     ) |>
-      as.numeric()
+    as.numeric())
+
+  new_data <- tibble::tibble(
+    id = new_ids,
+    date = dates,
+    price = prices
   )
+} else {
+  new_data <- tibble::tibble()
+}
 ```
 
+```{r combine_data, include=FALSE}
+chart_data <- dplyr::bind_rows(
+  existing_data,
+  new_data
+)
+
+arrow::write_parquet(
+  chart_data,
+  "data/data.parquet",
+  version = "latest",
+  compression = "zstd"
+)
+```
 
 ```{r plot, echo=FALSE}
-plot <- messages |>
+plot <- chart_data |>
   ggplot2::ggplot(ggplot2::aes(x = date, y = price)) +
   ggplot2::geom_line() +
   ggplot2::geom_point() +

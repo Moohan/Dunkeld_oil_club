@@ -77,6 +77,34 @@
       ],
       "Hash": "e749cae40fa9ef469b6050959517453c"
     },
+    "arrow": {
+      "Package": "arrow",
+      "Version": "12.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "RemoteType": "standard",
+      "RemotePkgRef": "arrow",
+      "RemoteRef": "arrow",
+      "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
+      "RemotePkgPlatform": "i386+x86_64-w64-mingw32",
+      "RemoteSha": "12.0.1",
+      "Requirements": [
+        "R",
+        "R6",
+        "assertthat",
+        "bit64",
+        "cpp11",
+        "glue",
+        "methods",
+        "purrr",
+        "rlang",
+        "stats",
+        "tidyselect",
+        "utils",
+        "vctrs"
+      ],
+      "Hash": "6f47141e9d2f266b3cd87ac0cb013031"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",
@@ -87,6 +115,22 @@
       ],
       "Hash": "e8a22846fff485f0be3770c2da758713"
     },
+    "assertthat": {
+      "Package": "assertthat",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "RemoteType": "standard",
+      "RemotePkgRef": "assertthat",
+      "RemoteRef": "assertthat",
+      "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
+      "RemotePkgPlatform": "i386+x86_64-w64-mingw32",
+      "RemoteSha": "0.2.1",
+      "Requirements": [
+        "tools"
+      ],
+      "Hash": "50c838a310445e954bc13f26f26a6ecf"
+    },
     "base64enc": {
       "Package": "base64enc",
       "Version": "0.1-3",
@@ -96,6 +140,42 @@
         "R"
       ],
       "Hash": "543776ae6848fde2f48ff3816d0628bc"
+    },
+    "bit": {
+      "Package": "bit",
+      "Version": "4.0.5",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "RemoteType": "standard",
+      "RemotePkgRef": "bit",
+      "RemoteRef": "bit",
+      "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
+      "RemotePkgPlatform": "i386+x86_64-w64-mingw32",
+      "RemoteSha": "4.0.5",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "d242abec29412ce988848d0294b208fd"
+    },
+    "bit64": {
+      "Package": "bit64",
+      "Version": "4.0.5",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "RemoteType": "standard",
+      "RemotePkgRef": "bit64",
+      "RemoteRef": "bit64",
+      "RemoteRepos": "https://packagemanager.posit.co/cran/latest",
+      "RemotePkgPlatform": "i386+x86_64-w64-mingw32",
+      "RemoteSha": "4.0.5",
+      "Requirements": [
+        "R",
+        "bit",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "9fe98599ca456d6552421db0d6772d8f"
     },
     "bslib": {
       "Package": "bslib",
