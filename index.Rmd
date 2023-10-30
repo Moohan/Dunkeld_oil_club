@@ -16,7 +16,7 @@ gmailr::gm_auth(
 )
 ```
 ```{r get_messages, include=FALSE}
-message_ids <- gmailr::gm_messages(search = "The Oil-Club") |>
+message_ids <- gmailr::gm_messages(search = "subject:Oil") |>
   gmailr::gm_id()
 
 existing_data <- arrow::read_parquet("data/data.parquet")
